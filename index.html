@@ -1,0 +1,982 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<title>미식플레너</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;1,400&family=Noto+Serif+KR:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="app">
+<div id="toast"></div>
+
+<!-- ============ SPLASH ============ -->
+<div class="screen" id="screen-splash">
+  <div style="flex:1;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:24px;">
+    <div class="splash-pot">
+      <div class="steam">
+        <div class="steam-line"></div>
+        <div class="steam-line"></div>
+        <div class="steam-line"></div>
+      </div>
+      <svg viewBox="0 0 120 100" fill="none">
+        <rect x="48" y="18" width="24" height="9" rx="4" fill="#B8553A"/>
+        <ellipse cx="60" cy="31" rx="40" ry="11" fill="#C86040"/>
+        <rect x="20" y="38" width="80" height="46" rx="9" fill="#B8553A"/>
+        <rect x="26" y="44" width="68" height="7" rx="3" fill="#D4856A" opacity=".4"/>
+        <rect x="6" y="46" width="16" height="9" rx="4" fill="#8B3A24"/>
+        <rect x="98" y="46" width="16" height="9" rx="4" fill="#8B3A24"/>
+        <ellipse cx="60" cy="84" rx="40" ry="6" fill="#8B3A24" opacity=".4"/>
+      </svg>
+    </div>
+    <div class="splash-logo">
+      <div class="splash-circle">G</div>
+      <div class="splash-title">미식플레너</div>
+      <div class="splash-sub">GASTRONOMY · EST.2025</div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ HOME (비로그인) ============ -->
+<div class="screen" id="screen-home">
+  <div style="overflow-y:auto;flex:1;padding-bottom:calc(var(--tabbar-h) + 24px);" class="ns">
+    <div class="status-bar"><span id="t-home">9:41</span><span>●●●●</span></div>
+    <header class="home-header">
+      <div class="logo-wrap" onclick="go('home')">
+        <div class="logo-circle">G</div>
+        <div><div class="logo-text">미식플레너</div><span class="logo-en">GASTRONOMY · EST.2025</span></div>
+      </div>
+      <button onclick="go('signup')" style="font-family:var(--font-en);font-style:italic;font-size:13px;color:var(--ink-mute);letter-spacing:0.1em;">회원가입</button>
+    </header>
+    <div style="padding:0 20px 14px;">
+      <button class="btn btn-primary btn-block" onclick="go('login')">로그인 시작하기 →</button>
+    </div>
+    <div class="pact-card">
+      <div class="pact-eyebrow">A Pact of Refinement</div>
+      <div class="pact-title">품격있는 미식 문화를<br>위한 약속</div>
+      <div class="pact-body">더치페이 진행 시, 방장님은 <strong>메뉴판 정가</strong>를 기준으로 안내해 주세요.</div>
+    </div>
+    <div class="circle-menu">
+      <div class="circle-btn" onclick="goAuth('matching')">
+        <div class="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <span class="clabel">오픈채팅방<br>매칭서비스</span>
+      </div>
+      <div class="circle-btn" onclick="goAuth('ai')">
+        <div class="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div>
+        <span class="clabel">미식투어<br>AI추천</span>
+      </div>
+      <div class="circle-btn" onclick="goAuth('record')">
+        <div class="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg></div>
+        <span class="clabel">미식<br>기록하기</span>
+      </div>
+    </div>
+    <div class="slide-head"><div><span class="sht-en gold">MICHELIN CURATION</span><div class="sht-ko">미쉐린 스타 큐레이션</div></div><span class="sht-more">— View All</span></div>
+    <div class="hero-slider" id="sl-mh">
+      <div class="hero-slides" id="ss-mh"></div>
+      <button class="slider-arrow prev" onclick="sMv('mh',-1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button class="slider-arrow next" onclick="sMv('mh',1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+      <div class="slider-dots" id="sd-mh"></div>
+    </div>
+    <div class="slide-head" style="margin-top:14px;"><div><span class="sht-en green">DINE TOGETHER</span><div class="sht-ko">혼자 가기 아쉬운 오마카세</div></div><span class="sht-more">— View All</span></div>
+    <div class="hero-slider" id="sl-oh">
+      <div class="hero-slides" id="ss-oh"></div>
+      <button class="slider-arrow prev" onclick="sMv('oh',-1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button class="slider-arrow next" onclick="sMv('oh',1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+      <div class="slider-dots" id="sd-oh"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ HOME (로그인 후) ============ -->
+<div class="screen" id="screen-home-loggedin">
+  <div style="overflow-y:auto;flex:1;padding-bottom:calc(var(--tabbar-h) + 24px);" class="ns">
+    <div class="status-bar"><span>9:41</span><span>●●●●</span></div>
+    <header class="home-header">
+      <div class="logo-wrap" onclick="go('home-loggedin')">
+        <div class="logo-circle">G</div>
+        <div><div class="logo-text">미식플레너</div><span class="logo-en">GASTRONOMY · EST.2025</span></div>
+      </div>
+      <button class="logout-btn" onclick="doLogout()">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        LOGOUT
+      </button>
+    </header>
+    <div class="user-greeting">
+      <div class="avatar">김</div>
+      <div>
+        <div class="greeting-hello">BONJOUR</div>
+        <div class="greeting-name">박지윤님</div>
+        <div class="greeting-meta">Gourmet ID <strong>#0824</strong></div>
+      </div>
+    </div>
+    <div class="pact-card">
+      <div class="pact-eyebrow">A Pact of Refinement</div>
+      <div class="pact-title">품격있는 미식 문화를 위한 약속</div>
+      <div class="pact-body">더치페이 진행 시, 방장님은 <strong>메뉴판 정가</strong>를 기준으로 안내해 주세요.</div>
+    </div>
+    <div class="circle-menu">
+      <div class="circle-btn" onclick="go('matching')">
+        <div class="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
+        <span class="clabel">오픈채팅방<br>매칭서비스</span>
+      </div>
+      <div class="circle-btn" onclick="go('ai')">
+        <div class="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg></div>
+        <span class="clabel">미식투어<br>AI추천</span>
+      </div>
+      <div class="circle-btn" onclick="go('record')">
+        <div class="circle"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg></div>
+        <span class="clabel">미식<br>기록하기</span>
+      </div>
+    </div>
+    <div class="slide-head"><div><span class="sht-en gold">MICHELIN CURATION</span><div class="sht-ko">미쉐린 스타 큐레이션</div></div><span class="sht-more">— View All</span></div>
+    <div class="hero-slider" id="sl-mm">
+      <div class="hero-slides" id="ss-mm"></div>
+      <button class="slider-arrow prev" onclick="sMv('mm',-1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button class="slider-arrow next" onclick="sMv('mm',1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+      <div class="slider-dots" id="sd-mm"></div>
+    </div>
+    <div class="slide-head" style="margin-top:14px;"><div><span class="sht-en green">DINE TOGETHER</span><div class="sht-ko">혼자 가기 아쉬운 오마카세</div></div><span class="sht-more">— View All</span></div>
+    <div class="hero-slider" id="sl-om">
+      <div class="hero-slides" id="ss-om"></div>
+      <button class="slider-arrow prev" onclick="sMv('om',-1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M15 18l-6-6 6-6"/></svg></button>
+      <button class="slider-arrow next" onclick="sMv('om',1)"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M9 18l6-6-6-6"/></svg></button>
+      <div class="slider-dots" id="sd-om"></div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ============ LOGIN ============ -->
+<div class="screen auth-bg" id="screen-login">
+  <div class="status-bar"><span>9:41</span><span>●●●●</span></div>
+  <header class="auth-header">
+    <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--terracotta)" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+    <h1>로그인</h1>
+    <button class="icon-btn ghost" onclick="go('home')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--ink-mute)" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>
+  </header>
+  <div class="auth-body">
+    <div class="welcome">
+      <div class="w-eyebrow">WELCOME BACK</div>
+      <div class="w-title">반가워요</div>
+      <div class="w-sub">미식플레너 계정으로 로그인하세요</div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">이메일 주소</label>
+      <div class="input-field" style="background:var(--cream);">
+        <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        <input type="email" id="loginEmail" placeholder="name@example.com">
+      </div>
+    </div>
+    <div class="input-group">
+      <label class="input-label">비밀번호</label>
+      <div class="input-field" style="background:var(--cream);">
+        <svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+        <input type="password" id="loginPw" placeholder="비밀번호">
+      </div>
+    </div>
+    <!-- ⬇️ Firebase 연결 시 signInWithEmailAndPassword 호출 ⬇️ -->
+    <button class="login-main-btn" onclick="doLogin()">로그인</button>
+    <div class="divider-or"><span>또는 다음 계정으로 계속하기</span></div>
+    <button class="social-btn" onclick="doLogin()">
+      <svg width="20" height="20" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+      Google로 계속하기
+    </button>
+    <button class="social-btn kakao" onclick="doLogin()">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 3C6.48 3 2 6.58 2 11c0 2.86 1.88 5.36 4.7 6.78L5.5 21.6c-.1.32.27.59.55.4l4.55-3.04c.46.04.92.07 1.4.07 5.52 0 10-3.58 10-8s-4.48-8-10-8z"/></svg>
+      카카오톡으로 계속하기
+    </button>
+    <button class="social-btn naver" onclick="doLogin()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M16.273 12.845L7.376 0H0v24h7.726V11.155L16.624 24H24V0h-7.727z"/></svg>
+      네이버로 계속하기
+    </button>
+    <div class="signup-link-bottom">아직 회원이 아니신가요?<a onclick="go('signup')">회원가입</a></div>
+  </div>
+</div>
+
+<!-- ============ SIGNUP ============ -->
+<div class="screen auth-bg" id="screen-signup">
+  <div class="status-bar"><span>9:41</span><span>●●●●</span></div>
+  <header class="auth-header">
+    <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+    <h1 style="color:var(--ink);">회원가입</h1>
+    <div style="width:40px"></div>
+  </header>
+  <div style="overflow-y:auto;flex:1;padding-bottom:20px;" class="ns">
+    <div class="signup-banner">
+      <div class="sb-eyebrow">JOIN THE GASTRONOMY</div>
+      <div class="sb-title">회원가입</div>
+      <div class="sb-sub">품격있는 미식가들의 식탁에 초대합니다</div>
+    </div>
+    <div style="padding:0 24px 24px;">
+      <span class="section-label">— Personal Info</span>
+      <div class="input-group"><label class="input-label">성명</label><div class="input-field" style="background:var(--cream);"><svg class="input-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><input type="text" placeholder="예: 홍길동"></div></div>
+      <div class="input-group"><label class="input-label">생년월일</label><div class="input-field" style="background:var(--cream);"><input type="text" placeholder="예: 030303" maxlength="6"></div></div>
+      <div class="input-group"><label class="input-label">전화번호</label><div class="input-field" style="background:var(--cream);"><input type="tel" placeholder="예: 01012345678"></div></div>
+      <span class="section-label" style="margin-top:4px;">— Gourmet Identity</span>
+      <div class="input-group"><label class="input-label">닉네임</label><div class="input-field" style="background:var(--cream);"><input type="text" placeholder="미식가로 활동할 닉네임"></div></div>
+      <div class="input-group"><label class="input-label">비밀번호</label><div class="input-field" style="background:var(--cream);"><input type="password" placeholder="특수문자 1자 이상 포함"></div></div>
+      <!-- ⬇️ Firebase createUserWithEmailAndPassword 자리 ⬇️ -->
+      <button class="signup-submit" onclick="doLogin()">
+        회원가입 완료
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ LOGIN SUCCESS ============ -->
+<div class="screen alert-screen" id="screen-login-success">
+  <div class="alert-box">
+    <div class="alert-icon green" style="position:relative;">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+    </div>
+    <div class="alert-eyebrow">WELCOME</div>
+    <div class="alert-title">로그인이 완료되었습니다</div>
+    <div class="alert-body">안전하게 접속되었습니다.<br>이제 미식플레너의 모든 기능을<br>이용하실 수 있습니다.</div>
+    <button class="alert-btn" onclick="go('home-loggedin')">미식 시작하기</button>
+  </div>
+</div>
+
+<!-- ============ LOGOUT ALERT ============ -->
+<div class="screen alert-screen" id="screen-logout-alert">
+  <div class="alert-box">
+    <div class="alert-icon green">
+      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    </div>
+    <div class="alert-eyebrow">À BIENTÔT</div>
+    <div class="alert-title">로그아웃이 완료되었습니다</div>
+    <div class="alert-body">안전하게 로그아웃되었습니다.<br>다음 식탁에서 또 만나요.</div>
+    <button class="alert-btn" onclick="go('home')">확인</button>
+  </div>
+</div>
+
+<!-- ============ MATCHING ============ -->
+<div class="screen" id="screen-matching">
+  <div style="overflow-y:auto;flex:1;padding-bottom:20px;" class="ns">
+    <div class="status-bar"><span>9:41</span><span>●●●●</span></div>
+    <header class="app-header">
+      <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <div class="header-title-wrap"><span class="header-en">GOURMET MATCHING</span><span class="header-ko">미식 매칭</span></div>
+      <div style="width:40px"></div>
+    </header>
+    <div class="match-progress">
+      <div class="progress-ring">
+        <svg viewBox="0 0 200 200"><circle class="pr-bg" cx="100" cy="100" r="88"/><circle class="pr-fg" id="pr-arc" cx="100" cy="100" r="88"/></svg>
+        <div class="pr-center"><div class="pr-pct" id="pr-pct">55%</div><div class="pr-label">MATCHING</div></div>
+      </div>
+      <div class="match-status">Finding your table</div>
+      <div class="match-status-ko">취향이 맞는 분들을 찾는 중입니다</div>
+    </div>
+    <div class="pref-card">
+      <div class="pref-label">Choose Your Mood</div>
+      <div class="pref-sub">매칭을 위해 성향에 맞는 것을 선택하세요</div>
+      <div class="pref-opts">
+        <button class="pref-opt sel" data-mode="quiet"><span class="poi">🌙</span><div class="pon">고독한 채팅</div><div class="pos">Silent Mode</div></button>
+        <button class="pref-opt" data-mode="talk"><span class="poi">🍽️</span><div class="pon">미식 대화</div><div class="pos">Gourmet Talk</div></button>
+      </div>
+      <div class="pref-msg" id="pref-msg"><strong>박지윤님</strong>은 고독한 채팅을 선호하시네요.</div>
+    </div>
+    <div style="padding:16px 20px 0;">
+      <button class="btn btn-primary btn-block" onclick="go('rooms')">매칭 완료 · 방 들어가기 →</button>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ROOMS ============ -->
+<div class="screen" id="screen-rooms">
+  <div style="overflow-y:auto;flex:1;padding-bottom:calc(var(--tabbar-h) + 20px);" class="ns">
+    <div class="status-bar"><span>9:41</span><span>●●●●</span></div>
+    <header class="rooms-header">
+      <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <div class="rooms-title-wrap"><span class="rooms-sub" id="rooms-sub-text">SILENT TABLES</span><div class="rooms-title" id="rooms-title-text">고독한 오픈채팅방</div></div>
+      <button class="icon-btn ghost" onclick="showSheet('rooms-menu')" style="margin-right:6px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+      <button class="add-room-btn" onclick="go('create-room')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+    </header>
+    <div class="filter-pills">
+      <button class="pill active">전체</button>
+      <button class="pill">오늘</button>
+      <button class="pill">이번주</button>
+      <button class="pill tag">#오마카세</button>
+      <button class="pill tag">#한식코스</button>
+    </div>
+    <div class="room-list">
+      <article class="room-card featured" onclick="go('enter-room-mingles')">
+        <div class="rc-badge">★ HOST PICK</div>
+        <div class="rc-top"><div><div class="rc-name">밍글스</div><div class="rc-meta"><span class="rc-time">오늘 저녁 6:00</span><span class="dot"></span><span>한식 · 청담동</span></div></div><div class="rc-seats"><div class="rc-seats-num">3<span class="total">/4</span></div><div class="rc-seats-label">SEATS</div></div></div>
+        <div class="rc-host"><div class="host-av">박</div><div style="flex:1;"><div class="host-name">박지윤 · 방장</div><div class="host-badges"><span class="hb gold">정가준수 왕</span><span class="hb">침묵 마스터</span></div></div><div class="rc-price"><div class="rc-price-label">PER PERSON</div><div class="rc-price-val">₩ 280,000</div></div></div>
+        <div class="rc-tags"><span class="rc-tag"><span class="hash">#</span>감칠맛파</span><span class="rc-tag"><span class="hash">#</span>구석자리</span></div>
+      </article>
+      <article class="room-card" onclick="go('enter-room-jungsik')">
+        <div class="rc-top"><div><div class="rc-name">정식당</div><div class="rc-meta"><span class="rc-time">오늘 저녁 7:00</span><span class="dot"></span><span>한식 · 청담동</span></div></div><div class="rc-seats"><div class="rc-seats-num">2<span class="total">/4</span></div><div class="rc-seats-label">SEATS</div></div></div>
+        <div class="rc-host"><div class="host-av">김</div><div style="flex:1;"><div class="host-name">김민석 · 방장</div><div class="host-badges"><span class="hb gold">정가준수 왕</span></div></div><div class="rc-price"><div class="rc-price-label">PER PERSON</div><div class="rc-price-val">₩ 250,000</div></div></div>
+        <div class="rc-tags"><span class="rc-tag"><span class="hash">#</span>한식코스</span><span class="rc-tag"><span class="hash">#</span>미식대화</span></div>
+      </article>
+      <article class="room-card" onclick="go('enter-room-eatanic')">
+        <div class="rc-top"><div><div class="rc-name">이타닉가든</div><div class="rc-meta"><span class="rc-time">오늘 저녁 7:30</span><span class="dot"></span><span>한식 · 종로</span></div></div><div class="rc-seats"><div class="rc-seats-num">1<span class="total">/3</span></div><div class="rc-seats-label">SEATS</div></div></div>
+        <div class="rc-host"><div class="host-av">강</div><div style="flex:1;"><div class="host-name">강영욱 · 방장</div><div class="host-badges"><span class="hb gold">정가준수 왕</span></div></div><div class="rc-price"><div class="rc-price-label">PER PERSON</div><div class="rc-price-val">₩ 195,000</div></div></div>
+        <div class="rc-tags"><span class="rc-tag"><span class="hash">#</span>차분한분위기</span></div>
+      </article>
+      <article class="room-card is-full">
+        <div class="rc-top"><div><div class="rc-name">솔밤</div><div class="rc-meta"><span class="rc-time">오늘 저녁 8:00</span><span class="dot"></span><span>한식 · 신사동</span></div></div><div class="rc-seats"><div class="rc-seats-num">4<span class="total">/4</span></div><div class="rc-seats-label">SEATS</div></div></div>
+        <div class="rc-host"><div class="host-av">이</div><div style="flex:1;"><div class="host-name">이수현 · 방장</div><div class="host-badges"><span class="hb">침묵 마스터</span></div></div><div class="rc-price"><div class="rc-price-label">PER PERSON</div><div class="rc-price-val">₩ 165,000</div></div></div>
+      </article>
+    </div>
+    <div style="height:20px;"></div>
+  </div>
+  <nav class="tabbar">
+    <button class="tab" onclick="go('home-loggedin')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>홈</span></button>
+    <button class="tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>오픈채팅방</span></button>
+    <button class="tab" onclick="go('ai')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg><span>미식투어</span></button>
+    <button class="tab has-dot" onclick="go('record')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg><span>미식기록</span></button>
+  </nav>
+</div>
+
+
+<!-- ============ ENTER ROOM - 밍글스 ============ -->
+<div class="screen" id="screen-enter-room-mingles">
+  <div style="overflow-y:auto;flex:1;padding-bottom:20px;" class="ns">
+    <div class="status-bar"><span>9:41</span><span>●●●●</span></div>
+    <header class="app-header">
+      <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <div class="header-title-wrap"><span class="header-en">ENTER THE TABLE</span><span class="header-ko">방 들어오기</span></div>
+      <div style="width:40px"></div>
+    </header>
+    <div class="enter-card">
+      <div class="resv-photo"><div class="ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--ink-mute)" stroke-width="1.5" style="margin:0 auto 8px;display:block;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>방장이 올린<br>예약 사진입니다</div></div>
+      <div class="enter-info">
+        <div class="enter-name">밍글스 ★★★</div>
+        <div class="enter-meta"><span>오늘 저녁 6:00</span> · 한식 · 청담동 · ₩280,000</div>
+        <div class="name-confirm"><div class="nc-label">노쇼 방지를 위한 본인 확인</div><div class="nc-name">박지윤</div></div>
+        <div class="enter-notice">위 이름으로 입장합니다.<br>노쇼 시 패널티가 부여됩니다.</div>
+        <button class="btn btn-primary btn-block" onclick="go('chat-mingles')">방 들어오기 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ENTER ROOM - 정식당 ============ -->
+<div class="screen" id="screen-enter-room-jungsik">
+  <div style="overflow-y:auto;flex:1;padding-bottom:20px;" class="ns">
+    <div class="status-bar"><span>9:41</span><span>●●●●</span></div>
+    <header class="app-header">
+      <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <div class="header-title-wrap"><span class="header-en">ENTER THE TABLE</span><span class="header-ko">방 들어오기</span></div>
+      <div style="width:40px"></div>
+    </header>
+    <div class="enter-card">
+      <div class="resv-photo"><div class="ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--ink-mute)" stroke-width="1.5" style="margin:0 auto 8px;display:block;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>방장이 올린<br>예약 사진입니다</div></div>
+      <div class="enter-info">
+        <div class="enter-name">정식당 ★★</div>
+        <div class="enter-meta"><span>오늘 저녁 7:00</span> · 한식 · 청담동 · ₩250,000</div>
+        <div class="name-confirm"><div class="nc-label">노쇼 방지를 위한 본인 확인</div><div class="nc-name">박지윤</div></div>
+        <div class="enter-notice">위 이름으로 입장합니다.<br>노쇼 시 패널티가 부여됩니다.</div>
+        <button class="btn btn-primary btn-block" onclick="go('chat-jungsik')">방 들어오기 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ ENTER ROOM - 이타닉가든 ============ -->
+<div class="screen" id="screen-enter-room-eatanic">
+  <div style="overflow-y:auto;flex:1;padding-bottom:20px;" class="ns">
+    <div class="status-bar"><span>9:41</span><span>●●●●</span></div>
+    <header class="app-header">
+      <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <div class="header-title-wrap"><span class="header-en">ENTER THE TABLE</span><span class="header-ko">방 들어오기</span></div>
+      <div style="width:40px"></div>
+    </header>
+    <div class="enter-card">
+      <div class="resv-photo"><div class="ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--ink-mute)" stroke-width="1.5" style="margin:0 auto 8px;display:block;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>방장이 올린<br>예약 사진입니다</div></div>
+      <div class="enter-info">
+        <div class="enter-name">이타닉가든 ★</div>
+        <div class="enter-meta"><span>오늘 저녁 7:30</span> · 한식 · 종로구 · ₩195,000</div>
+        <div class="name-confirm"><div class="nc-label">노쇼 방지를 위한 본인 확인</div><div class="nc-name">박지윤</div></div>
+        <div class="enter-notice">위 이름으로 입장합니다.<br>노쇼 시 패널티가 부여됩니다.</div>
+        <button class="btn btn-primary btn-block" onclick="go('chat-eatanic')">방 들어오기 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CHAT - 밍글스 (고독한 채팅) ============ -->
+<div class="screen" id="screen-chat-mingles" style="max-height:100vh;">
+  <div class="status-bar" style="flex-shrink:0;"><span>9:41</span><span>●●●●</span></div>
+  <header class="chat-header">
+    <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+    <div style="flex:1;">
+      <div class="chat-rest">밍글스 · 고독한 채팅</div>
+      <div class="chat-meta"><span class="time">오늘 저녁 6:00</span><span class="dot"></span><span class="ppl">3/4명</span><span class="dot"></span><span>₩ 280,000</span></div>
+    </div>
+    <button class="icon-btn ghost" onclick="showSheet('chat-menu')" style="margin-right:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <button class="leave-btn" onclick="showSheet('chat-menu')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>LEAVE</button>
+  </header>
+  <div class="chat-body ns" id="chatBody-mingles" style="flex:1;overflow-y:auto;">
+    <div class="sys-msg"><span>— 고독한 채팅방입니다. 예약 관련 내용만 나눠주세요 —</span></div>
+    <div class="resv-banner" onclick="toast('예약 사진 확인 (데모)')">
+      <div class="rb-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+      <div><span class="rb-strong">방장이 올린 예약 사진</span><span class="rb-sub">탭하여 확인 · 노쇼 방지</span></div>
+    </div>
+    <div class="price-banner">
+      <svg class="pb-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+      <div class="pb-text"><strong>정가 준수 약속</strong>이 활성화된 방입니다. ₩280,000</div>
+    </div>
+    <div class="msg-row"><div class="msg-sender host" onclick="showSheet('user-popup')">박지윤</div><div class="msg-bubble">안녕하세요. 오늘 저녁 6시 밍글스 예약입니다. 정가 280,000원 기준으로 진행합니다.</div><div class="msg-time">5:40 PM</div></div>
+    <div class="msg-row"><div class="msg-sender" onclick="showSheet('user-popup')">정다은</div><div class="msg-bubble">네, 확인했습니다. 6시에 뵙겠습니다.</div><div class="msg-time">5:43 PM</div></div>
+    <div class="msg-row mine"><div class="msg-bubble">저도 확인했어요. 제시간에 도착하겠습니다.</div><div class="msg-time">5:45 PM</div></div>
+    <div class="msg-row"><div class="msg-sender host" onclick="showSheet('user-popup')">박지윤</div><div class="msg-bubble">감사합니다. 입구에서 뵙겠습니다 🙏</div><div class="msg-time">5:46 PM</div></div>
+  </div>
+  <div class="chat-input-wrap">
+    <div class="chat-input"><button style="color:var(--ink-mute);flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><input type="text" class="chat-msg-input" data-room="mingles" placeholder="예약 관련 내용만 입력해주세요"></div>
+    <button class="send-btn" onclick="sendChatMsg('mingles')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+  </div>
+</div>
+
+<!-- ============ CHAT - 정식당 (미식 대화) ============ -->
+<div class="screen" id="screen-chat-jungsik" style="max-height:100vh;">
+  <div class="status-bar" style="flex-shrink:0;"><span>9:41</span><span>●●●●</span></div>
+  <header class="chat-header">
+    <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+    <div style="flex:1;">
+      <div class="chat-rest">정식당 · 미식 대화</div>
+      <div class="chat-meta"><span class="time">오늘 저녁 7:00</span><span class="dot"></span><span class="ppl">2/4명</span><span class="dot"></span><span>₩ 250,000</span></div>
+    </div>
+    <button class="icon-btn ghost" onclick="showSheet('chat-menu')" style="margin-right:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <button class="leave-btn" onclick="showSheet('chat-menu')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>LEAVE</button>
+  </header>
+  <div class="chat-body ns" id="chatBody-jungsik" style="flex:1;overflow-y:auto;">
+    <div class="sys-msg"><span>— 미식 대화 채팅방입니다. 미식 이야기를 나눠보세요 —</span></div>
+    <div class="resv-banner" onclick="toast('예약 사진 확인 (데모)')">
+      <div class="rb-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+      <div><span class="rb-strong">방장이 올린 예약 사진</span><span class="rb-sub">탭하여 확인 · 노쇼 방지</span></div>
+    </div>
+    <div class="price-banner">
+      <svg class="pb-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+      <div class="pb-text"><strong>정가 준수 약속</strong>이 활성화된 방입니다. ₩250,000</div>
+    </div>
+    <div class="msg-row"><div class="msg-sender host" onclick="showSheet('user-popup')">김민석</div><div class="msg-bubble">안녕하세요! 정식당은 처음이신 분 계세요? 저번에 갔을 때 발효 코스가 정말 인상적이었어요 🍽️</div><div class="msg-time">6:20 PM</div></div>
+    <div class="msg-row"><div class="msg-sender" onclick="showSheet('user-popup')">이지훈</div><div class="msg-bubble">저는 처음이에요. 어떤 코스 추천하세요? 감칠맛 있는 걸 좋아하는데요.</div><div class="msg-time">6:23 PM</div></div>
+    <div class="msg-row"><div class="msg-sender host" onclick="showSheet('user-popup')">김민석</div><div class="msg-bubble">그러면 시그니처 발효 코스 꼭 드셔보세요. 된장 기반 소스가 감칠맛이 엄청나요.</div><div class="msg-time">6:24 PM</div></div>
+    <div class="msg-row mine"><div class="msg-bubble">저도 감칠맛파라 기대되네요! 오늘 처음 가보는 건데 설레요.</div><div class="msg-time">6:25 PM</div></div>
+  </div>
+  <div class="chat-input-wrap">
+    <div class="chat-input"><button style="color:var(--ink-mute);flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><input type="text" class="chat-msg-input" data-room="jungsik" placeholder="미식 이야기를 나눠보세요"></div>
+    <button class="send-btn" onclick="sendChatMsg('jungsik')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+  </div>
+</div>
+
+<!-- ============ CHAT - 이타닉가든 (고독한 채팅) ============ -->
+<div class="screen" id="screen-chat-eatanic" style="max-height:100vh;">
+  <div class="status-bar" style="flex-shrink:0;"><span>9:41</span><span>●●●●</span></div>
+  <header class="chat-header">
+    <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+    <div style="flex:1;">
+      <div class="chat-rest">이타닉가든 · 고독한 채팅</div>
+      <div class="chat-meta"><span class="time">오늘 저녁 7:30</span><span class="dot"></span><span class="ppl">1/3명</span><span class="dot"></span><span>₩ 195,000</span></div>
+    </div>
+    <button class="icon-btn ghost" onclick="showSheet('chat-menu')" style="margin-right:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <button class="leave-btn" onclick="showSheet('chat-menu')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>LEAVE</button>
+  </header>
+  <div class="chat-body ns" id="chatBody-eatanic" style="flex:1;overflow-y:auto;">
+    <div class="sys-msg"><span>— 고독한 채팅방입니다. 예약 관련 내용만 나눠주세요 —</span></div>
+    <div class="resv-banner" onclick="toast('예약 사진 확인 (데모)')">
+      <div class="rb-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+      <div><span class="rb-strong">방장이 올린 예약 사진</span><span class="rb-sub">탭하여 확인 · 노쇼 방지</span></div>
+    </div>
+    <div class="price-banner">
+      <svg class="pb-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+      <div class="pb-text"><strong>정가 준수 약속</strong>이 활성화된 방입니다. ₩195,000</div>
+    </div>
+    <div class="msg-row"><div class="msg-sender host" onclick="showSheet('user-popup')">강영욱</div><div class="msg-bubble">오늘 저녁 7시 30분 이타닉가든 예약입니다. 정가 195,000원 기준으로 진행합니다.</div><div class="msg-time">7:00 PM</div></div>
+    <div class="msg-row mine"><div class="msg-bubble">확인했습니다. 제시간에 도착하겠습니다.</div><div class="msg-time">7:05 PM</div></div>
+  </div>
+  <div class="chat-input-wrap">
+    <div class="chat-input"><button style="color:var(--ink-mute);flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><input type="text" class="chat-msg-input" data-room="eatanic" placeholder="예약 관련 내용만 입력해주세요"></div>
+    <button class="send-btn" onclick="sendChatMsg('eatanic')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+  </div>
+</div>
+
+<!-- ============ ENTER ROOM ============ -->
+<div class="screen" id="screen-enter-room">
+  <div style="overflow-y:auto;flex:1;padding-bottom:20px;" class="ns">
+    <div class="status-bar"><span>9:41</span><span>●●●●</span></div>
+    <header class="app-header">
+      <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <div class="header-title-wrap"><span class="header-en">ENTER THE TABLE</span><span class="header-ko">방 들어오기</span></div>
+      <div style="width:40px"></div>
+    </header>
+    <div class="enter-card">
+      <div class="resv-photo">
+        <div class="ph"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="var(--ink-mute)" stroke-width="1.5" style="margin:0 auto 8px;display:block;"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>방장이 올린<br>예약 사진입니다</div>
+      </div>
+      <div class="enter-info">
+        <div class="enter-name">밍글스</div>
+        <div class="enter-meta"><span>오늘 저녁 6:00</span> · 한식 · 청담동 · ₩280,000</div>
+        <div class="name-confirm"><div class="nc-label">노쇼 방지를 위한 본인 확인</div><div class="nc-name">박지윤</div></div>
+        <div class="enter-notice">위 이름으로 입장합니다.<br>노쇼 시 패널티가 부여됩니다.</div>
+        <button class="btn btn-primary btn-block" onclick="go('chat')">방 들어오기 →</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ============ CREATE ROOM ============ -->
+<div class="screen" id="screen-create-room">
+  <div style="overflow-y:auto;flex:1;padding-bottom:20px;" class="ns">
+    <div class="status-bar"><span>9:41</span><span>●●●●</span></div>
+    <header class="app-header">
+      <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <div class="header-title-wrap"><span class="header-en">CREATE A SILENT TABLE</span><span class="header-ko">방 만들기</span></div>
+      <div style="width:40px"></div>
+    </header>
+    <div class="photo-upload" onclick="toast('카메라가 실행됩니다 (데모)')">
+      <div class="pu-icon"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+      <span class="pu-en">UPLOAD RESERVATION</span>
+      <div class="pu-title">예약 사진을 올려주세요</div>
+      <div class="pu-sub">캐치테이블·네이버예약 화면을 공유해주세요<br>노쇼 방지를 위한 필수 절차입니다</div>
+    </div>
+    <div class="guide-card">
+      <h3>방 만들기 가이드</h3>
+      <ul style="list-style:none;padding:0;">
+        <li><strong>식당 이름과 예상 금액</strong>, 시간을 정확히 적어주세요</li>
+        <li><strong>본인의 이름</strong>은 가입 시 등록한 실명으로 자동 표시됩니다</li>
+        <li>예약 사진을 공유해 신뢰성을 높여주세요</li>
+      </ul>
+    </div>
+    <div class="create-form">
+      <div class="input-group"><label class="input-label">식당 이름</label><div class="input-field" style="background:var(--ivory);"><input type="text" placeholder="예: 밍글스"></div></div>
+      <div class="row-2">
+        <div class="input-group"><label class="input-label">예약 시간</label><div class="input-field" style="background:var(--ivory);"><input type="text" placeholder="저녁 6시"></div></div>
+        <div class="input-group"><label class="input-label">정가 (1인)</label><div class="input-field" style="background:var(--ivory);"><span style="color:var(--terracotta);font-family:var(--font-en);font-weight:600;">₩</span><input type="text" placeholder="280,000"></div></div>
+      </div>
+      <div class="input-group">
+        <label class="input-label">최대 인원</label>
+        <div class="seat-select">
+          <div class="seat-opt" data-s="2"><span class="sn">2</span><span class="sl">2인</span></div>
+          <div class="seat-opt sel" data-s="3"><span class="sn">3</span><span class="sl">3인</span></div>
+          <div class="seat-opt" data-s="4"><span class="sn">4</span><span class="sl">4인</span></div>
+          <div class="seat-opt" data-s="6"><span class="sn">6</span><span class="sl">6인</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="price-pact">
+      <div class="pp-icon"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg></div>
+      <div style="flex:1;"><div class="pp-title">정가 준수 약속</div><div class="pp-sub">메뉴판 정가 기준으로 더치페이 진행</div></div>
+      <div class="toggle on"></div>
+    </div>
+    <!-- ⬇️ Firebase Firestore addDoc + Storage 사진 업로드 자리 ⬇️ -->
+    <button class="create-submit" onclick="toast('방이 생성되었습니다!');go('chat')">
+      방 만들기
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+    </button>
+  </div>
+</div>
+
+<!-- ============ CHAT ============ -->
+<div class="screen" id="screen-chat" style="max-height:100vh;">
+  <div class="status-bar" style="flex-shrink:0;"><span>9:41</span><span>●●●●</span></div>
+  <header class="chat-header">
+    <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+    <div style="flex:1;"><div class="chat-rest">밍글스</div><div class="chat-meta"><span class="time">오늘 저녁 6:00</span><span class="dot"></span><span class="ppl">3/4명</span><span class="dot"></span><span>₩ 280,000</span></div></div>
+    <button class="icon-btn ghost" onclick="showSheet('chat-menu')" style="margin-right:4px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg></button>
+    <button class="leave-btn" onclick="showSheet('chat-menu')"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>LEAVE</button>
+  </header>
+  <div class="chat-body ns" id="chatBody" style="flex:1;overflow-y:auto;">
+    <div class="sys-msg"><span>— 박지윤님이 입장하셨습니다 —</span></div>
+    <div class="resv-banner" onclick="toast('예약 사진 확인 (데모)')">
+      <div class="rb-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div>
+      <div><span class="rb-strong">방장이 올린 예약 사진</span><span class="rb-sub">탭하여 확인 · 노쇼 방지</span></div>
+    </div>
+    <div class="price-banner">
+      <svg class="pb-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+      <div class="pb-text"><strong>정가 준수 약속</strong>이 활성화된 방입니다.</div>
+    </div>
+    <div class="msg-row"><div class="msg-sender host" onclick="showSheet('user-popup')">박지윤</div><div class="msg-bubble">밍글스 저녁 6시 예약입니다. 1인당 정가 280,000원이며, 4명 모이면 진행합니다.</div><div class="msg-time">5:42 PM</div></div>
+    <div class="msg-row"><div class="msg-sender" onclick="showSheet('user-popup')">정다은</div><div class="msg-bubble">조용히 식사만 할 수 있는 거 맞죠? 저는 극I입니다 🌙</div><div class="msg-time">5:45 PM</div></div>
+    <div class="msg-row mine"><div class="msg-bubble">감사합니다, 6시 정각에 도착하겠습니다.</div><div class="msg-time">5:48 PM</div></div>
+  </div>
+  <div class="chat-input-wrap">
+    <div class="chat-input"><button style="color:var(--ink-mute);flex-shrink:0;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></button><input type="text" id="msgInput" placeholder="내용을 써주세요"></div>
+    <button class="send-btn" id="sendBtn"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+  </div>
+</div>
+
+<!-- ============ AI ============ -->
+<div class="screen" id="screen-ai">
+  <div style="overflow-y:auto;flex:1;padding-bottom:calc(var(--tabbar-h) + 20px);" class="ns">
+    <div class="status-bar"><span>9:41</span><span>●●●●</span></div>
+    <header class="app-header">
+      <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <div class="header-title-wrap"><span class="header-en">AI GOURMET CURATOR</span><span class="header-ko">미식투어 AI</span></div>
+    </header>
+    <div class="ai-greeting"><div class="ai-eyebrow">HIDDEN GEM TOUR</div><div class="ai-title">박지윤님의 미각 데이터로<br>찾아낸 오늘의 숨은 맛집이에요</div></div>
+    <!-- 미각 프로필 요약 -->
+    <div style="margin:0 20px 14px;background:var(--ivory);border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px 18px;">
+      <div style="font-family:var(--font-display);font-size:13px;font-weight:600;margin-bottom:10px;">박지윤님의 미각 프로필</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <span style="background:var(--terracotta-pale);color:var(--terracotta-deep);padding:5px 12px;border-radius:999px;font-size:11px;font-weight:600;"># 감칠맛파</span>
+        <span style="background:var(--deep-green-pale);color:var(--deep-green);padding:5px 12px;border-radius:999px;font-size:11px;font-weight:600;"># 혼자먹기 좋은 곳</span>
+        <span style="background:var(--gold-pale);color:#8B6914;padding:5px 12px;border-radius:999px;font-size:11px;font-weight:600;"># 숨은맛집</span>
+        <span style="background:var(--cream-deep);color:var(--ink-soft);padding:5px 12px;border-radius:999px;font-size:11px;font-weight:600;"># 1인 좌석 선호</span>
+      </div>
+    </div>
+    <!-- ⬇️ Gemini recommendRestaurants Cloud Function 자리 ⬇️ -->
+
+    <!-- 오늘의 숨은 맛집 추천 -->
+    <div class="rec-section">
+      <div class="rec-head">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:18px;">🍜</span>
+          <div><h3>오늘의 숨은 맛집 추천</h3><p>구르망·블루리본 기반 혼밥 맛집</p></div>
+        </div>
+      </div>
+      <div class="rec-list">
+        <div class="rec-card"><div class="rec-num">01</div><div class="rec-info"><div class="rec-name">멘야 산다이메</div><div class="rec-reason">라멘·<span class="tag">1인 카운터석</span>·조용한 분위기</div></div><div class="rec-score"><div class="num">98</div><div class="lbl">MATCH</div></div></div>
+        <div class="rec-card"><div class="rec-num">02</div><div class="rec-info"><div class="rec-name">옥동식</div><div class="rec-reason">맑은 돼지곰탕·<span class="tag">혼밥 환영</span>·구르망</div></div><div class="rec-score"><div class="num">94</div><div class="lbl">MATCH</div></div></div>
+        <div class="rec-card"><div class="rec-num">03</div><div class="rec-info"><div class="rec-name">우동 카덴</div><div class="rec-reason">수타 우동·<span class="tag">혼자 오기 좋음</span></div></div><div class="rec-score"><div class="num">91</div><div class="lbl">MATCH</div></div></div>
+        <div class="rec-card"><div class="rec-num">04</div><div class="rec-info"><div class="rec-name">포 285</div><div class="rec-reason">쌀국수·<span class="tag">조용한 좌석</span>·구르망</div></div><div class="rec-score"><div class="num">87</div><div class="lbl">MATCH</div></div></div>
+      </div>
+    </div>
+
+    <!-- 디저트 추천 -->
+    <div class="rec-section" style="margin-top:4px;">
+      <div class="rec-head">
+        <div style="display:flex;align-items:center;gap:8px;">
+          <span style="font-size:18px;">🍮</span>
+          <div><h3>식후 · 디저트 & 커피</h3><p>오늘 식사 후 들르기 좋은 곳</p></div>
+        </div>
+      </div>
+      <div class="rec-list">
+        <div class="rec-card"><div class="rec-num" style="font-size:18px;">🍮</div><div class="rec-info"><div class="rec-name">오후의 홍차</div><div class="rec-reason">청담·<span class="tag">조용한 1인 좌석</span>·크렘브륄레</div></div><div class="rec-score"><div class="num">96</div><div class="lbl">MATCH</div></div></div>
+        <div class="rec-card"><div class="rec-num" style="font-size:18px;">☕</div><div class="rec-info"><div class="rec-name">테라로사 청담</div><div class="rec-reason">스페셜티·<span class="tag">혼자 오기 좋음</span></div></div><div class="rec-score"><div class="num">91</div><div class="lbl">MATCH</div></div></div>
+        <div class="rec-card"><div class="rec-num" style="font-size:18px;">🧁</div><div class="rec-info"><div class="rec-name">르빵 한남</div><div class="rec-reason">베이커리·<span class="tag">1인 창가 좌석</span></div></div><div class="rec-score"><div class="num">88</div><div class="lbl">MATCH</div></div></div>
+      </div>
+    </div>
+    <div class="quick-chips">
+      <button class="quick-chip" onclick="document.getElementById('aiQ').value=this.textContent">조용한 분위기 추천</button>
+      <button class="quick-chip" onclick="document.getElementById('aiQ').value=this.textContent">감칠맛 강한 곳</button>
+      <button class="quick-chip" onclick="document.getElementById('aiQ').value=this.textContent">1인 좌석 있는 곳</button>
+      <button class="quick-chip" onclick="document.getElementById('aiQ').value=this.textContent">오마카세 추천</button>
+    </div>
+    <div class="ai-input-wrap">
+      <div class="ai-input">
+        <input type="text" id="aiQ" placeholder="어떤 식사를 원하시나요?">
+        <!-- ⬇️ Gemini Cloud Function 호출 자리 ⬇️ -->
+        <button class="ai-send" onclick="toast('AI가 분석 중입니다...')"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg></button>
+      </div>
+    </div>
+  </div>
+  <nav class="tabbar">
+    <button class="tab" onclick="go('home-loggedin')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>홈</span></button>
+    <button class="tab" onclick="go('rooms')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>오픈채팅방</span></button>
+    <button class="tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg><span>미식투어</span></button>
+    <button class="tab has-dot" onclick="go('record')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg><span>미식기록</span></button>
+  </nav>
+</div>
+
+<!-- ============ RECORD ============ -->
+<div class="screen" id="screen-record">
+  <div style="overflow-y:auto;flex:1;padding-bottom:calc(var(--tabbar-h) + 80px);" class="ns">
+    <div class="status-bar"><span>9:41</span><span>●●●●</span></div>
+    <header class="app-header">
+      <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <div class="header-title-wrap"><span class="header-en">GOURMET RECORD</span><span class="header-ko">미식 기록</span></div>
+    </header>
+
+    <!-- 음성 입력 -->
+    <div style="padding:0 20px;margin-bottom:16px;">
+      <div style="background:var(--ivory);border:1px solid var(--line);border-radius:var(--radius-xl);padding:24px;text-align:center;">
+        <div style="font-family:var(--font-en);font-style:italic;font-size:10px;color:var(--terracotta);letter-spacing:0.25em;margin-bottom:12px;">STEP 01 · VOICE</div>
+        <button class="mic-btn" id="micBtn" style="margin:0 auto 12px;">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a3 3 0 0 0-3 3v7a3 3 0 0 0 6 0V5a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="8" y1="22" x2="16" y2="22"/></svg>
+        </button>
+        <div class="waveform" id="waveform"><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div><div class="wave"></div></div>
+        <div class="voice-status" id="voiceStatus">버튼을 눌러 시작하세요</div>
+        <div class="voice-hint">최대 3분 녹음 가능</div>
+        <div class="transcript" id="transcript"></div>
+      </div>
+    </div>
+
+    <!-- 타이핑 입력 -->
+    <div style="padding:0 20px;margin-bottom:16px;">
+      <div style="background:var(--ivory);border:1px solid var(--line);border-radius:var(--radius-md);overflow:hidden;">
+        <div style="padding:10px 14px 4px;font-size:10px;color:var(--ink-mute);font-family:var(--font-en);font-style:italic;letter-spacing:0.15em;">— 또는 직접 타이핑하기</div>
+        <div style="display:flex;align-items:flex-end;gap:8px;padding:4px 10px 10px;">
+          <textarea id="recordTyping" rows="2" placeholder="오늘 식사 후기를 직접 입력하세요..." style="flex:1;background:none;font-family:var(--font-body);font-size:13px;color:var(--ink);resize:none;line-height:1.5;padding:4px;border:none;outline:none;"></textarea>
+          <button onclick="submitTyping()" style="width:36px;height:36px;border-radius:50%;background:var(--deep-green);color:var(--ivory);display:flex;align-items:center;justify-content:center;flex-shrink:0;box-shadow:var(--shadow-cta);">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 2L11 13M22 2l-7 20-4-9-9-4 20-7z"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- 사진 찍기 -->
+    <div style="padding:0 20px;margin-bottom:20px;">
+      <button class="photo-record-btn" onclick="toast('카메라가 실행됩니다 (데모)')">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+        오늘 먹은 음식 사진 찍기
+      </button>
+    </div>
+
+    <!-- 미각 슬라이더 6개 (항상 보임) -->
+    <div style="padding:0 20px;margin-bottom:16px;">
+      <div style="font-family:var(--font-en);font-style:italic;font-size:10px;color:var(--terracotta);letter-spacing:0.25em;margin-bottom:10px;">STEP 02 · TASTE PROFILE</div>
+      <div style="background:var(--ivory);border:1px solid var(--line);border-radius:var(--radius-lg);padding:20px 18px;">
+
+        <div style="margin-bottom:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-family:var(--font-display);font-size:13px;font-weight:600;">🍯 단맛</div>
+            <div style="font-family:var(--font-en);font-size:14px;font-weight:600;color:var(--terracotta);" id="val-단맛">2</div>
+          </div>
+          <div style="position:relative;height:8px;background:var(--cream-deep);border-radius:4px;">
+            <div id="fill-단맛" style="position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--gold-soft),var(--terracotta));border-radius:4px;width:40%;transition:width 0.1s;pointer-events:none;"></div>
+            <input type="range" class="taste-range" data-t="단맛" min="0" max="5" value="2" step="1" style="position:absolute;inset:-8px 0;width:100%;height:24px;opacity:0;cursor:pointer;margin:0;z-index:2;">
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:9px;color:var(--ink-mute);"><span>없음</span><span>약함</span><span>보통</span><span>강함</span><span>매우강함</span></div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-family:var(--font-display);font-size:13px;font-weight:600;">🧂 짠맛</div>
+            <div style="font-family:var(--font-en);font-size:14px;font-weight:600;color:var(--terracotta);" id="val-짠맛">3</div>
+          </div>
+          <div style="position:relative;height:8px;background:var(--cream-deep);border-radius:4px;">
+            <div id="fill-짠맛" style="position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--gold-soft),var(--terracotta));border-radius:4px;width:60%;transition:width 0.1s;pointer-events:none;"></div>
+            <input type="range" class="taste-range" data-t="짠맛" min="0" max="5" value="3" step="1" style="position:absolute;inset:-8px 0;width:100%;height:24px;opacity:0;cursor:pointer;margin:0;z-index:2;">
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:9px;color:var(--ink-mute);"><span>없음</span><span>약함</span><span>보통</span><span>강함</span><span>매우강함</span></div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-family:var(--font-display);font-size:13px;font-weight:600;">🌶️ 매운맛</div>
+            <div style="font-family:var(--font-en);font-size:14px;font-weight:600;color:var(--terracotta);" id="val-매운맛">1</div>
+          </div>
+          <div style="position:relative;height:8px;background:var(--cream-deep);border-radius:4px;">
+            <div id="fill-매운맛" style="position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--gold-soft),var(--terracotta));border-radius:4px;width:20%;transition:width 0.1s;pointer-events:none;"></div>
+            <input type="range" class="taste-range" data-t="매운맛" min="0" max="5" value="1" step="1" style="position:absolute;inset:-8px 0;width:100%;height:24px;opacity:0;cursor:pointer;margin:0;z-index:2;">
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:9px;color:var(--ink-mute);"><span>없음</span><span>약함</span><span>보통</span><span>강함</span><span>매우강함</span></div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-family:var(--font-display);font-size:13px;font-weight:600;">✨ 감칠맛</div>
+            <div style="font-family:var(--font-en);font-size:14px;font-weight:600;color:var(--terracotta);" id="val-감칠맛">4</div>
+          </div>
+          <div style="position:relative;height:8px;background:var(--cream-deep);border-radius:4px;">
+            <div id="fill-감칠맛" style="position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--gold-soft),var(--terracotta));border-radius:4px;width:80%;transition:width 0.1s;pointer-events:none;"></div>
+            <input type="range" class="taste-range" data-t="감칠맛" min="0" max="5" value="4" step="1" style="position:absolute;inset:-8px 0;width:100%;height:24px;opacity:0;cursor:pointer;margin:0;z-index:2;">
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:9px;color:var(--ink-mute);"><span>없음</span><span>약함</span><span>보통</span><span>강함</span><span>매우강함</span></div>
+        </div>
+
+        <div style="margin-bottom:18px;">
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-family:var(--font-display);font-size:13px;font-weight:600;">🍋 산미</div>
+            <div style="font-family:var(--font-en);font-size:14px;font-weight:600;color:var(--terracotta);" id="val-산미">3</div>
+          </div>
+          <div style="position:relative;height:8px;background:var(--cream-deep);border-radius:4px;">
+            <div id="fill-산미" style="position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--gold-soft),var(--terracotta));border-radius:4px;width:60%;transition:width 0.1s;pointer-events:none;"></div>
+            <input type="range" class="taste-range" data-t="산미" min="0" max="5" value="3" step="1" style="position:absolute;inset:-8px 0;width:100%;height:24px;opacity:0;cursor:pointer;margin:0;z-index:2;">
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:9px;color:var(--ink-mute);"><span>없음</span><span>약함</span><span>보통</span><span>강함</span><span>매우강함</span></div>
+        </div>
+
+        <div>
+          <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">
+            <div style="font-family:var(--font-display);font-size:13px;font-weight:600;">☕ 쓴맛</div>
+            <div style="font-family:var(--font-en);font-size:14px;font-weight:600;color:var(--terracotta);" id="val-쓴맛">2</div>
+          </div>
+          <div style="position:relative;height:8px;background:var(--cream-deep);border-radius:4px;">
+            <div id="fill-쓴맛" style="position:absolute;left:0;top:0;height:100%;background:linear-gradient(90deg,var(--gold-soft),var(--terracotta));border-radius:4px;width:40%;transition:width 0.1s;pointer-events:none;"></div>
+            <input type="range" class="taste-range" data-t="쓴맛" min="0" max="5" value="2" step="1" style="position:absolute;inset:-8px 0;width:100%;height:24px;opacity:0;cursor:pointer;margin:0;z-index:2;">
+          </div>
+          <div style="display:flex;justify-content:space-between;margin-top:4px;font-size:9px;color:var(--ink-mute);"><span>없음</span><span>약함</span><span>보통</span><span>강함</span><span>매우강함</span></div>
+        </div>
+
+      </div>
+      <!-- 안내 -->
+      <div style="margin-top:10px;background:var(--deep-green-pale);border-radius:var(--radius-md);padding:10px 14px;display:flex;align-items:center;gap:8px;">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--deep-green)" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9 12l2 2 4-4"/></svg>
+        <span style="font-size:11px;color:var(--deep-green);">슬라이더 조절 시 <strong>미식 여권 차트</strong>에 실시간 반영됩니다</span>
+      </div>
+    </div>
+
+    <!-- 편의성 -->
+    <div style="padding:0 20px;margin-bottom:16px;">
+      <div style="font-family:var(--font-en);font-style:italic;font-size:10px;color:var(--terracotta);letter-spacing:0.25em;margin-bottom:10px;">STEP 03 · DETAILS</div>
+      <div class="option-card"><div class="oc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg></div><div style="flex:1;"><div class="oc-title">정가 준수 확인</div><div class="oc-sub">메뉴판 가격대로 결제했어요</div></div><div class="toggle on"></div></div>
+      <div class="option-card"><div class="oc-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><div style="flex:1;"><div class="oc-title">최소한의 직원 대면</div><div class="oc-sub">키오스크·태블릿 주문 가능</div></div><div class="toggle on"></div></div>
+    </div>
+
+  </div>
+
+  <!-- 저장 버튼 -->
+  <div style="position:fixed;bottom:calc(var(--tabbar-h));left:50%;transform:translateX(-50%);width:100%;max-width:390px;padding:12px 20px;background:var(--ivory);border-top:1px solid var(--line-soft);z-index:99;">
+    <button onclick="saveRecord()" style="width:100%;background:var(--deep-green);color:var(--ivory);padding:14px;border-radius:var(--radius-md);font-family:var(--font-display);font-size:15px;font-weight:500;box-shadow:var(--shadow-cta);">
+      미식 기록 저장 → 여권 확인
+    </button>
+  </div>
+
+  <nav class="tabbar">
+    <button class="tab" onclick="go('home-loggedin')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>홈</span></button>
+    <button class="tab" onclick="go('rooms')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>오픈채팅방</span></button>
+    <button class="tab" onclick="go('ai')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg><span>미식투어</span></button>
+    <button class="tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg><span>미식기록</span></button>
+  </nav>
+</div>
+
+<!-- ============ PASSPORT ============ -->
+<div class="screen" id="screen-passport">
+  <div style="overflow-y:auto;flex:1;padding-bottom:calc(var(--tabbar-h) + 20px);" class="ns">
+    <div class="status-bar"><span>9:41</span><span>●●●●</span></div>
+    <header class="app-header">
+      <button class="icon-btn ghost" onclick="back()"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M19 12H5M12 19l-7-7 7-7"/></svg></button>
+      <div class="header-title-wrap"><span class="header-en">GOURMET PASSPORT</span><span class="header-ko">미식 여권</span></div>
+      <button class="icon-btn ghost"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+    </header>
+    <div class="passport-cover" id="passportCover" style="background:linear-gradient(135deg,#8B3A24 0%,#B8553A 50%,#8B3A24 100%);">
+      <div class="pc">
+        <div style="text-align:center;margin-bottom:14px;"><div class="pc-crest">G</div><div class="pc-republic">REPUBLIC OF GASTRONOMY</div></div>
+        <div class="pc-name">박 지 윤</div>
+        <div class="pc-id">— ID · 0824 —</div>
+        <div class="pc-stats">
+          <div><div class="pc-num">47</div><div class="pc-lbl">Visits</div></div>
+          <div><div class="pc-num">98%</div><div class="pc-lbl">Clean</div></div>
+          <div><div class="pc-num">12</div><div class="pc-lbl">Badges</div></div>
+        </div>
+      </div>
+    </div>
+    <!-- 여권 색상 선택 -->
+    <div class="passport-colors">
+      <div class="plabel">나만의 여권 색상 선택</div>
+      <div class="color-opts">
+        <div class="color-opt sel" style="background:linear-gradient(135deg,#8B3A24,#B8553A);" onclick="setPC(this,'linear-gradient(135deg,#8B3A24 0%,#B8553A 50%,#8B3A24 100%)')"></div>
+        <div class="color-opt" style="background:linear-gradient(135deg,#1a3530,#2D4A3E);" onclick="setPC(this,'linear-gradient(135deg,#1a3530 0%,#2D4A3E 50%,#1a3530 100%)')"></div>
+        <div class="color-opt" style="background:linear-gradient(135deg,#1a2540,#2D3F6B);" onclick="setPC(this,'linear-gradient(135deg,#1a2540 0%,#2D3F6B 50%,#1a2540 100%)')"></div>
+        <div class="color-opt" style="background:linear-gradient(135deg,#5C1A2A,#8B2B42);" onclick="setPC(this,'linear-gradient(135deg,#5C1A2A 0%,#8B2B42 50%,#5C1A2A 100%)')"></div>
+        <div class="color-opt" style="background:linear-gradient(135deg,#1a1a1a,#2d2d2d);" onclick="setPC(this,'linear-gradient(135deg,#1a1a1a 0%,#2d2d2d 50%,#1a1a1a 100%)')"></div>
+      </div>
+    </div>
+    <div class="profile-card">
+      <div class="profile-head"><span class="profile-en">— PALATE PROFILE</span><div class="profile-ko">당신의 미각 지도</div></div>
+      <div class="profile-identity">섬세한 미각의 소유자</div>
+      <div class="radar-wrap"><svg viewBox="-130 -130 260 260" id="radarSvg"><polygon class="rg" id="g20"/><polygon class="rg" id="g40"/><polygon class="rg" id="g60"/><polygon class="rg" id="g80"/><polygon class="rgo" id="g100"/><g id="rAxes"></g><polygon class="rf" id="rData"/><g id="rDots"></g><g id="rLabels"></g></svg></div>
+    </div>
+    <div class="clean-index">
+      <div class="ci-meta"><div class="ci-en">— CLEAN INDEX</div><div class="ci-title">정가 준수율</div><div class="ci-sub">최근 47번의 식사 중 46번 준수</div></div>
+      <div class="ci-circle"><svg width="70" height="70" viewBox="0 0 70 70"><circle cx="35" cy="35" r="30" fill="none" stroke="rgba(255,255,255,0.2)" stroke-width="5"/><circle cx="35" cy="35" r="30" fill="none" stroke="var(--gold-soft)" stroke-width="5" stroke-linecap="round" stroke-dasharray="188.5" stroke-dashoffset="3.77"/></svg><div class="ci-num">98%</div></div>
+    </div>
+    <div class="sec-title"><h3>획득 배지</h3><span class="sec-more">— View All (12)</span></div>
+    <div class="badges"><div class="badge-card gold"><div class="badge-icon">👑</div><div class="badge-name">정가 준수 왕</div></div><div class="badge-card gold"><div class="badge-icon">🌙</div><div class="badge-name">침묵 모드<br>마스터</div></div><div class="badge-card"><div class="badge-icon">⏰</div><div class="badge-name">약속 시간<br>엄수</div></div></div>
+    <div class="tags-section"><div class="sec-title" style="padding:0;margin-bottom:8px;"><h3>나의 미식 키워드</h3></div><div class="tags-list"><span class="tag"><span class="hash">#</span>조용한_구석자리</span><span class="tag"><span class="hash">#</span>키오스크_선호</span><span class="tag"><span class="hash">#</span>오마카세_매니아</span><span class="tag"><span class="hash">#</span>감칠맛파</span></div></div>
+    <div class="sec-title"><h3>최근 미식 기록</h3><span class="sec-more">— More</span></div>
+    <div class="recent-list">
+      <div class="recent-item"><div class="ri-emoji">🍱</div><div class="ri-info"><div class="ri-name">밍글스</div><div class="ri-date">2026.05.14 · 한식 코스</div></div><div class="ri-score">4.9</div></div>
+      <div class="recent-item"><div class="ri-emoji">🍣</div><div class="ri-info"><div class="ri-name">스시 코지마</div><div class="ri-date">2026.05.10 · 오마카세</div></div><div class="ri-score">4.8</div></div>
+      <div class="recent-item"><div class="ri-emoji">🍷</div><div class="ri-info"><div class="ri-name">이타닉가든</div><div class="ri-date">2026.05.05 · 한식</div></div><div class="ri-score">5.0</div></div>
+    </div>
+    <div style="height:20px;"></div>
+  </div>
+  <nav class="tabbar">
+    <button class="tab" onclick="go('home-loggedin')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg><span>홈</span></button>
+    <button class="tab" onclick="go('rooms')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg><span>오픈채팅방</span></button>
+    <button class="tab" onclick="go('ai')"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l2.4 7.4H22l-6.2 4.5 2.4 7.4-6.2-4.5-6.2 4.5 2.4-7.4L2 9.4h7.6z"/></svg><span>미식투어</span></button>
+    <button class="tab active"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M12 2l3 6 6 1-4.5 4.5L18 20l-6-3-6 3 1.5-6.5L3 9l6-1z"/></svg><span>미식기록</span></button>
+  </nav>
+</div>
+
+<!-- ============ 바텀시트 ============ -->
+<div class="sheet-wrap" id="sw-chat-menu">
+  <div class="sheet-backdrop" onclick="closeSheet('chat-menu')"></div>
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-item" onclick="toast('노쇼 신고가 접수되었습니다');closeSheet('chat-menu')"><div class="si-icon red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div><div class="si-title">노쇼 신고</div><div class="si-sub">예약 당일 나타나지 않은 경우</div></div></div>
+    <div class="sheet-item" onclick="toast('방 신고가 접수되었습니다');closeSheet('chat-menu')"><div class="si-icon red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="4.93" y1="4.93" x2="19.07" y2="19.07"/></svg></div><div><div class="si-title">방 신고</div><div class="si-sub">부적절한 방 운영</div></div></div>
+    <div class="sheet-divider"></div>
+    <div class="sheet-item" onclick="toast('예약 사진을 확인합니다');closeSheet('chat-menu')"><div class="si-icon gold"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg></div><div><div class="si-title">예약 사진 확인</div><div class="si-sub">방장이 올린 예약 증빙</div></div></div>
+    <div class="sheet-divider"></div>
+    <div class="sheet-item" onclick="closeSheet('chat-menu');go('rooms')"><div class="si-icon red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg></div><div><div class="si-title">방 나가기</div><div class="si-sub">채팅방에서 퇴장</div></div></div>
+  </div>
+</div>
+
+<div class="sheet-wrap" id="sw-rooms-menu">
+  <div class="sheet-backdrop" onclick="closeSheet('rooms-menu')"></div>
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div class="sheet-item" onclick="toast('정가 위반 신고 접수');closeSheet('rooms-menu')"><div class="si-icon red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></div><div><div class="si-title">정가 위반 신고</div><div class="si-sub">메뉴판 가격 초과 청구</div></div></div>
+    <div class="sheet-item" onclick="toast('방폭 신고 접수');closeSheet('rooms-menu')"><div class="si-icon red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg></div><div><div class="si-title">방폭 신고</div><div class="si-sub">방장이 갑자기 방을 삭제한 경우</div></div></div>
+    <div class="sheet-item" onclick="toast('불량 호스트 신고 접수');closeSheet('rooms-menu')"><div class="si-icon red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div><div><div class="si-title">불량 호스트 신고</div><div class="si-sub">약속 불이행·불성실한 운영</div></div></div>
+    <div class="sheet-divider"></div>
+    <div class="sheet-item" onclick="toast('고객센터로 연결됩니다');closeSheet('rooms-menu')"><div class="si-icon green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div><div><div class="si-title">고객센터 문의</div><div class="si-sub">기타 문의사항</div></div></div>
+  </div>
+</div>
+
+<div class="sheet-wrap" id="sw-user-popup">
+  <div class="sheet-backdrop" onclick="closeSheet('user-popup')"></div>
+  <div class="sheet">
+    <div class="sheet-handle"></div>
+    <div style="padding:0 24px 16px;text-align:center;">
+      <div style="width:56px;height:56px;border-radius:50%;background:linear-gradient(135deg,var(--terracotta),var(--terracotta-deep));color:var(--ivory);display:flex;align-items:center;justify-content:center;font-family:var(--font-display);font-size:20px;font-weight:500;margin:0 auto 8px;">박</div>
+      <div style="font-family:var(--font-display);font-size:16px;font-weight:600;">박지윤</div>
+      <div style="font-size:11px;color:var(--ink-mute);margin-top:4px;">Clean Index 96% · 방장 횟수 23회</div>
+      <div style="display:flex;gap:8px;justify-content:center;margin-top:10px;"><span style="background:var(--gold-pale);color:#8B6914;padding:4px 10px;border-radius:999px;font-size:10px;font-weight:600;">정가준수 왕</span><span style="background:var(--terracotta-pale);color:var(--terracotta-deep);padding:4px 10px;border-radius:999px;font-size:10px;font-weight:600;">침묵 마스터</span></div>
+    </div>
+    <div class="sheet-divider"></div>
+    <div class="sheet-item" onclick="toast('좋아요를 보냈습니다 👍');closeSheet('user-popup')"><div class="si-icon green"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3H14z"/><path d="M7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"/></svg></div><div><div class="si-title">👍 좋아요</div><div class="si-sub">좋은 호스트에요!</div></div></div>
+    <div class="sheet-item" onclick="toast('신고가 접수되었습니다');closeSheet('user-popup')"><div class="si-icon red"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg></div><div><div class="si-title">🚨 신고</div><div class="si-sub">부적절한 행동 신고</div></div></div>
+  </div>
+</div>
+
+<!-- ============ ADMIN PAGE ============ -->
+<div class="screen" id="screen-admin">
+  <div style="overflow-y:auto;flex:1;padding-bottom:20px;" class="ns">
+    <div class="status-bar"><span>9:41</span><span>●●●●</span></div>
+    <header class="app-header">
+      <div style="width:40px"></div>
+      <div class="header-title-wrap"><span class="header-en">ADMIN DASHBOARD</span><span class="header-ko">관리자 페이지</span></div>
+      <button class="logout-btn" onclick="doLogout()" style="margin-right:16px;">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+      </button>
+    </header>
+    <div style="padding:20px;">
+      <h3 style="margin-bottom:12px;font-family:var(--font-display);font-size:16px;">고객센터 문의 및 신고 내역</h3>
+      
+      <div style="background:var(--ivory);border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="background:var(--terracotta-pale);color:var(--terracotta-deep);padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600;">노쇼 신고</span>
+          <span style="font-size:12px;color:var(--ink-mute);">2026.05.10</span>
+        </div>
+        <div style="font-weight:600;margin-bottom:4px;">신고자: 정다은 (밍글스 방)</div>
+        <div style="font-size:13px;color:var(--ink);line-height:1.5;">방장이었던 박지윤님이 6시 예약이라고 해놓고 노쇼하셨습니다. 연락도 안 받네요.</div>
+      </div>
+
+      <div style="background:var(--ivory);border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="background:var(--gold-pale);color:#8B6914;padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600;">고객센터 문의</span>
+          <span style="font-size:12px;color:var(--ink-mute);">2026.05.09</span>
+        </div>
+        <div style="font-weight:600;margin-bottom:4px;">문의자: 김민석</div>
+        <div style="font-size:13px;color:var(--ink);line-height:1.5;">미각 분석 AI가 추천해주는 식당 리스트에 제가 다녀온 곳은 제외할 수 있나요? 필터 기능 추가를 건의합니다.</div>
+      </div>
+
+      <div style="background:var(--ivory);border:1px solid var(--line);border-radius:var(--radius-lg);padding:16px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:8px;">
+          <span style="background:var(--terracotta-pale);color:var(--terracotta-deep);padding:4px 8px;border-radius:4px;font-size:11px;font-weight:600;">정가 위반 신고</span>
+          <span style="font-size:12px;color:var(--ink-mute);">2026.05.08</span>
+        </div>
+        <div style="font-weight:600;margin-bottom:4px;">신고자: 이지훈 (정식당 방)</div>
+        <div style="font-size:13px;color:var(--ink);line-height:1.5;">분명히 1인 25만 원이라고 적혀있었는데, 현장에서 콜키지 비용이라며 5만 원을 추가로 내라고 강요했습니다.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script type="module" src="firebase.js"></script>
+<script src="app.js"></script>
+</div>
+</body>
+</html>
